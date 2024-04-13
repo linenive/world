@@ -1,4 +1,4 @@
-import { Dictionary, Epsilon } from "./Core";
+import { Dictionary } from "./Core";
 import { IWorldObject } from "./IWorldObject"
 
 export class World {

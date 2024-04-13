@@ -58,7 +58,7 @@ export class WorldDrawer implements Experience {
   }
 
   private addToScene(object: IWorldObject) {
-    const object3d = new Box();
+    const object3d = new Box(object.getSize());
     object3d.castShadow = true
 
     this.sceneObjects.add(object.getId(), object3d)

@@ -1,24 +1,19 @@
-import { Vector3 } from "./Vector3";
 import { IWorldObject } from "./IWorldObject";
+import { Vector3 } from "./Vector3";
 import { ForceVector } from "./PhysicsModel";
 
-export class Person implements IWorldObject {
+export class Wall implements IWorldObject {
     private id: number;
-    private name: string;
     private position: Vector3;
-    private size: Vector3 = new Vector3(0.2, 1, 0.2);
-    private force: ForceVector = {direction: {x: 0, y:0, z: 0}, magnitude: 0};
+    private size: Vector3;
     
-    constructor(id: number) {
+    constructor(id: number, position: Vector3, size: Vector3) {
         this.id = id;
-        this.name = 'John Doe'
-        this.position = Vector3.Zero;
-        this.force.direction = Vector3.Forward;
-        this.force.magnitude = 0.01;
+        this.position = position;
+        this.size = size;
     }
 
     update(){
-        console.log(this.name +' update');
     }
 
     public getId(): number {
@@ -38,6 +33,6 @@ export class Person implements IWorldObject {
     }
 
     public getForce(): ForceVector {
-        return this.force;
+        return {direction: Vector3.Zero, magnitude: 0};
     }
 }

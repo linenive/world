@@ -5,5 +5,6 @@ export interface IWorldObject {
     getId(): number;
     getPosition(): Vector3;
     setPosition(position: Vector3): void;
+    getSize(): Vector3;
     getForce(): ForceVector;
 }
