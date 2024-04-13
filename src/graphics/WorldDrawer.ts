@@ -4,7 +4,7 @@ import { Box } from './Box'
 import { Experience } from '../engine/Experience'
 import { Resource } from '../engine/Resources'
 
-export class Demo implements Experience {
+export class WorldDrawer implements Experience {
   resources: Resource[] = []
 
   constructor(private engine: Engine) {}

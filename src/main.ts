@@ -1,10 +1,11 @@
 import './style.scss'
 import { Engine } from './engine/Engine'
-import { Demo } from './demo/Demo'
+import { WorldDrawer } from './graphics/WorldDrawer'
+import { Game } from './logic/Game'
 
 new Engine({
   canvas: document.querySelector('#canvas') as HTMLCanvasElement,
-  experience: Demo,
+  experience: WorldDrawer,
   info: {
     twitter: 'https://twitter.com/maya_ndljk',
     github: 'https://github.com/mayacoda/simple-threejs-typescript-starter',
@@ -13,3 +14,5 @@ new Engine({
     title: 'A cube on a plane',
   },
 })
+
+new Game()
