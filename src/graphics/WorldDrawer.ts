@@ -6,7 +6,6 @@ import { Resource } from '../engine/Resources'
 import { World } from '../logic/World'
 import { Dictionary } from '../logic/Core'
 import { IWorldObject } from '../logic/IWorldObject'
-import { PersonLook } from './PersonLook'
 
 export class WorldDrawer implements Experience {
   resources: Resource[] = []

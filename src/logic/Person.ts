@@ -7,7 +7,7 @@ export class Person implements IWorldObject {
     private name: string;
     private position: Vector3;
     private size: Vector3 = new Vector3(0.2, 1, 0.2);
-    private force: ForceVector = {direction: {x: 0, y:0, z: 0}, magnitude: 0};
+    private force: ForceVector = {direction: new Vector3(0, 0, 0), magnitude: 0};
     
     constructor(id: number) {
         this.id = id;

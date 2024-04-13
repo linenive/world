@@ -1,4 +1,4 @@
-import { Vector3 } from "./Core";
+import { Vector3 } from "./Vector3";
 
 export interface ForceVector {
     direction: Vector3;
