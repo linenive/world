@@ -1,5 +1,6 @@
 import { Dictionary } from "./Core";
 import { IWorldObject } from "./IWorldObject"
+import { Vector3, checkCollision } from "./Vector3";
 
 export class World {
     private objects : Dictionary<number, IWorldObject> = new Dictionary<number, IWorldObject>;
@@ -27,11 +28,34 @@ export class World {
         console.log(object.getForce());
         
         const position = object.getPosition();
-        const newPosition = {
-            x: position.x + force.direction.x * force.magnitude,
-            y: position.y + force.direction.y * force.magnitude,
-            z: position.z + force.direction.z * force.magnitude
-        };
+        const newPosition = new Vector3(
+            position.x + force.direction.x * force.magnitude,
+            position.y + force.direction.y * force.magnitude,
+            position.z + force.direction.z * force.magnitude
+        );
+
+        if (this.checkCollisions(object, position, newPosition)) {
+            return;
+        }
+
         object.setPosition(newPosition);
+    }
+
+    // 아직 이동 주체의 부피를 고려하지는 않습니다.
+    private checkCollisions(
+        me: IWorldObject,
+        from: Vector3,
+        to: Vector3
+    ): boolean{
+        for (const obj of this.getIterWorldObjects()) {
+            if (obj.getId() === me.getId()) {
+                continue;
+            }
+
+            if (checkCollision(from, to, obj.getPosition(), obj.getSize())){
+                return true;
+            }
+        }
+        return false;
     }
 }
