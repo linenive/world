@@ -1,9 +1,3 @@
-export interface Vector3 {
-    x: number;
-    y: number;
-    z: number;
-}
-
 export class Dictionary<TKey extends string | number, TValue> {
     private dict: Record<TKey, TValue>;
 

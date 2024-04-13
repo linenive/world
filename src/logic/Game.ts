@@ -17,6 +17,7 @@ export class Game {
     }
 
     private update(): void{
+        this.world.update();
     }
 
     private gameLoop(): void{
