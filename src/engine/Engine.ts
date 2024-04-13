@@ -9,6 +9,7 @@ import { InfoConfig, InfoUI } from './interface/InfoUI'
 import { Experience, ExperienceConstructor } from './Experience'
 import { Loader } from './interface/Loader'
 import { Raycaster } from './Raycaster'
+import { World } from '../logic/World'
 
 export class Engine {
   public readonly camera!: Camera
@@ -27,10 +28,12 @@ export class Engine {
   constructor({
     canvas,
     experience,
+    world,
     info,
   }: {
     canvas: HTMLCanvasElement
     experience: ExperienceConstructor
+    world: World
     info?: InfoConfig
   }) {
     if (!canvas) {
@@ -46,7 +49,7 @@ export class Engine {
     this.raycaster = new Raycaster(this)
     this.infoUI = new InfoUI(info)
     this.renderEngine = new RenderEngine(this)
-    this.experience = new experience(this)
+    this.experience = new experience(this, world)
     this.resources = new Resources(this.experience.resources)
     this.loader = new Loader()
 

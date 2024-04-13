@@ -3,11 +3,23 @@ import * as THREE from 'three'
 import { Box } from './Box'
 import { Experience } from '../engine/Experience'
 import { Resource } from '../engine/Resources'
+import { World } from '../logic/World'
+import { Dictionary } from '../logic/Core'
+import { IWorldObject } from '../logic/IWorldObject'
+import { PersonLook } from './PersonLook'
 
 export class WorldDrawer implements Experience {
   resources: Resource[] = []
+  private world: World
+  private sceneObjects: Dictionary<number, THREE.Object3D>
 
-  constructor(private engine: Engine) {}
+  constructor(
+    private engine: Engine,
+    world: World
+    ) {
+      this.world = world
+      this.sceneObjects = new Dictionary<number, THREE.Object3D>()
+    }
 
   init() {
     const plane = new THREE.Mesh(
@@ -26,16 +38,30 @@ export class WorldDrawer implements Experience {
     directionalLight.position.set(2, 2, 2)
 
     this.engine.scene.add(directionalLight)
-
-    const box = new Box()
-    box.castShadow = true
-    box.rotation.y = Math.PI / 4
-    box.position.set(0, 0.5, 0)
-
-    this.engine.scene.add(box)
   }
 
   resize() {}
 
-  update() {}
+  update() {
+    var iter = this.world.getIterWorldObjects()
+    for(let obj of iter) {
+      if (!this.sceneObjects.has(obj.getId())) {
+        this.addToScene(obj)
+        console.log('Added object to scene')
+        continue
+      }
+      // Update object position
+      const object3d = this.sceneObjects.get(obj.getId())
+      const position = obj.getPosition()
+      object3d!.position.set(position.x, position.y, position.z)
+    }
+  }
+
+  private addToScene(object: IWorldObject) {
+    const object3d = new Box();
+    object3d.castShadow = true
+
+    this.sceneObjects.add(object.getId(), object3d)
+    this.engine.scene.add(object3d)
+  }
 }

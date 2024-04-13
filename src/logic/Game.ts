@@ -3,17 +3,20 @@ import { Person } from './Person';
 
 export class Game {
     private world: World;
-    private person: Person;
 
     constructor() {
         this.world = new World();
-        this.person = new Person();
+        var samplePerson = new Person(1);
+        this.world.addObject(samplePerson);
 
         setInterval(() => this.gameLoop(), 1000 / 60);
     }
 
+    public getWorld(): World {
+        return this.world;
+    }
+
     private update(): void{
-        console.log('Game update');
     }
 
     private gameLoop(): void{
