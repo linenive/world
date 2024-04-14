@@ -2,17 +2,15 @@ import { Vector3 } from "./Vector3";
 import { IWorldObject } from "./IWorldObject";
 import { IEyeSight } from "./IEyeSight";
 import { ForceVector } from "./PhysicsModel";
-import { Global } from "./Global";
+import { EyeSight } from "./EyeSight";
 
-export class Person implements IWorldObject, IEyeSight {
+export class Person implements IWorldObject {
     private id: number;
     private name: string;
     private position: Vector3;
     private size: Vector3 = new Vector3(0.2, 1, 0.2);
     private force: ForceVector = {direction: new Vector3(0, 0, 0), magnitude: 0};
-    private sightLocalPosition: Vector3 = new Vector3(0, 0.4, 0);
-    private sightLength: number = 10;
-    private fov: number = 120;
+    private eyeSight: IEyeSight = new EyeSight(this);
     
     constructor(id: number) {
         this.id = id;
@@ -46,20 +44,7 @@ export class Person implements IWorldObject, IEyeSight {
         return this.force;
     }
 
-    public getSightPosition(): Vector3 {
-        return Vector3.add(this.position, this.sightLocalPosition);
-    }
-
-    public getSightLength(): number {
-        return this.sightLength;
-    }
-    
-    public getFov(): number {
-        return this.fov;
-    }
-    
-    public canSee(point: Vector3): boolean {
-        return !Global.I().world?.checkCollisions(
-            this.id, this.getSightPosition(), point);
+    public getSight(): IEyeSight | null {
+        return this.eyeSight;
     }
 }

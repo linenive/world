@@ -35,4 +35,8 @@ export class Wall implements IWorldObject {
     public getForce(): ForceVector {
         return {direction: Vector3.Zero, magnitude: 0};
     }
+
+    public getSight(): null {
+        return null;
+    }
 }
