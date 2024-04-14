@@ -42,7 +42,7 @@ export class World implements IGlobalWorld {
             position.z + force.direction.z * force.magnitude
         );
 
-        if (this.checkCollisions(object, position, newPosition)) {
+        if (this.checkCollisions(object.getId(), position, newPosition)) {
             return;
         }
 
@@ -52,13 +52,13 @@ export class World implements IGlobalWorld {
     private constructor() { }
 
     // 아직 이동 주체의 부피를 고려하지는 않습니다.
-    private checkCollisions(
-        me: IWorldObject,
+    public checkCollisions(
+        ignoreId: number,
         from: Vector3,
         to: Vector3
     ): boolean{
         for (const obj of this.getIterWorldObjects()) {
-            if (obj.getId() === me.getId()) {
+            if (obj.getId() === ignoreId) {
                 continue;
             }
 
