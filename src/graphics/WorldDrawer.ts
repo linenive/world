@@ -7,21 +7,22 @@ import { World } from '../logic/World'
 import { Dictionary } from '../logic/Core'
 import { IWorldObject } from '../logic/IWorldObject'
 import { IGizmo } from './IGizmo'
-import { ConeGizmo } from './ConeGizmo'
+import { ConeOnSphereGizmo } from './ConeOnSphereGizmo'
+import { degrees2Radians } from '../logic/Angle'
 
 export class WorldDrawer implements Experience {
   resources: Resource[] = []
   private world: World
   private sceneObjects: Dictionary<number, THREE.Object3D>
-  private gizmos: Dictionary<number, IGizmo[]> = new Dictionary<number, IGizmo[]>()
+  private gizmos: Dictionary<number, IGizmo[]> = new Dictionary<
+    number,
+    IGizmo[]
+  >()
 
-  constructor(
-    private engine: Engine,
-    world: World
-    ) {
-      this.world = world
-      this.sceneObjects = new Dictionary<number, THREE.Object3D>()
-    }
+  constructor(private engine: Engine, world: World) {
+    this.world = world
+    this.sceneObjects = new Dictionary<number, THREE.Object3D>()
+  }
 
   init() {
     const plane = new THREE.Mesh(
@@ -46,7 +47,7 @@ export class WorldDrawer implements Experience {
 
   update() {
     var iter = this.world.getIterWorldObjects()
-    for(let obj of iter) {
+    for (let obj of iter) {
       const id = obj.getId()
       if (!this.sceneObjects.has(id)) {
         this.addToScene(obj)
@@ -60,8 +61,8 @@ export class WorldDrawer implements Experience {
 
       // Update gizmos
       const gizmos = this.gizmos.get(id)
-      if(gizmos) {
-        for(let gizmo of gizmos) {
+      if (gizmos) {
+        for (let gizmo of gizmos) {
           gizmo.setPosition(position)
         }
       }
@@ -74,9 +75,9 @@ export class WorldDrawer implements Experience {
     object3d.castShadow = true
 
     this.sceneObjects.add(id, object3d)
-    
+
     const gizmos = this.makeGizmos(object)
-    if(gizmos.length > 0) {
+    if (gizmos.length > 0) {
       this.gizmos.add(id, gizmos)
     }
 
@@ -87,14 +88,15 @@ export class WorldDrawer implements Experience {
     }
   }
 
-  private makeGizmos(object: IWorldObject) : IGizmo[] {
+  private makeGizmos(object: IWorldObject): IGizmo[] {
     const gizmos: IGizmo[] = []
     const eyeSight = object.getSight()
-    if(eyeSight) {
-      const eyeSightGizmo = new ConeGizmo(
+    if (eyeSight) {
+      const eyeSightGizmo = new ConeOnSphereGizmo(
         eyeSight.getSightPosition(),
-        eyeSight.getSightLength(), 
-        eyeSight.getFov());
+        eyeSight.getSightLength(),
+        degrees2Radians(eyeSight.getFov() / 2)
+      )
       gizmos.push(eyeSightGizmo)
     }
     return gizmos
