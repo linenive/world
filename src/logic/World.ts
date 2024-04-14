@@ -1,9 +1,17 @@
 import { Dictionary } from "./Core";
+import { Global } from "./Global";
+import { IGlobalWorld } from "./IGlobalWorld";
 import { IWorldObject } from "./IWorldObject"
 import { Vector3, checkCollision } from "./Vector3";
 
-export class World {
+export class World implements IGlobalWorld {
     private objects : Dictionary<number, IWorldObject> = new Dictionary<number, IWorldObject>;
+
+    public static createWorld(): World {
+        const world = new World();
+        Global.I().set(world);
+        return world;
+    }
 
     public addObject(object: IWorldObject): void{
         this.objects.add(object.getId(), object);
@@ -40,6 +48,8 @@ export class World {
 
         object.setPosition(newPosition);
     }
+
+    private constructor() { }
 
     // 아직 이동 주체의 부피를 고려하지는 않습니다.
     private checkCollisions(

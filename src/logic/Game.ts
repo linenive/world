@@ -7,7 +7,7 @@ export class Game {
     private world: World;
 
     constructor() {
-        this.world = new World();
+        this.world = World.createWorld();
         var samplePerson = new Person(1);
         this.world.addObject(samplePerson);
         
