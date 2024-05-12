@@ -1,7 +1,10 @@
 #include "../shaders/lygia/color/palette/water.glsl"
 
+uniform vec3 customColor;
+
 varying vec2 vUv;
 
 void main() {
-    gl_FragColor = vec4(water(vUv.y), 1.0);
+    vec3 color = customColor;
+    gl_FragColor = vec4(color, 1.0);
 }

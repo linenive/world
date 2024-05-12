@@ -43,7 +43,7 @@ export class WorldDrawer implements Experience {
     this.engine.scene.add(directionalLight)
   }
 
-  resize() {}
+  resize() { }
 
   update() {
     var iter = this.world.getIterWorldObjects()
@@ -71,7 +71,7 @@ export class WorldDrawer implements Experience {
 
   private addToScene(object: IWorldObject) {
     const id = object.getId()
-    const object3d = new Box(object.getSize())
+    const object3d = new Box(object.getSize(), object.getColor())
     object3d.castShadow = true
 
     this.sceneObjects.add(id, object3d)
