@@ -1,3 +1,4 @@
+import { clamp } from './Core';
 
 export class Vector3 {
     x: number;
@@ -13,7 +14,7 @@ export class Vector3 {
     static get Zero(): Vector3 {
         return new Vector3(0, 0, 0);
     }
-    
+
     static get Forward(): Vector3 {
         return new Vector3(0, 0, 1);
     }
@@ -42,6 +43,12 @@ export class Vector3 {
         return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
     }
 
+    /** 정규화된 벡터를 사용한다고 가정 */
+    static angleBetween(v1: Vector3, v2: Vector3): number {
+        var dotProduct = v1.dot(v2)
+        return Math.acos(clamp(dotProduct, -1, 1))
+    }
+
     public add(v: Vector3): Vector3 {
         return Vector3.add(this, v);
     }
@@ -56,6 +63,26 @@ export class Vector3 {
 
     public dot(v: Vector3): number {
         return Vector3.dot(this, v);
+    }
+
+    public magnitude(): number {
+        return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+    }
+
+    public squaredMagnitude(): number {
+        return this.x * this.x + this.y * this.y + this.z * this.z;
+    }
+
+    public normalize(): Vector3 {
+        const magnitude = this.magnitude();
+        return new Vector3(this.x / magnitude, this.y / magnitude, this.z / magnitude);
+    }
+
+    public distanceSquared(v: Vector3): number {
+        const dx = this.x - v.x;
+        const dy = this.y - v.y;
+        const dz = this.z - v.z;
+        return dx * dx + dy * dy + dz * dz;
     }
 
     toString(): string {
@@ -105,6 +132,6 @@ export function checkCollision(
 
 function isPointInsideBox(point: Vector3, min: Vector3, max: Vector3): boolean {
     return point.x >= min.x && point.x <= max.x &&
-           point.y >= min.y && point.y <= max.y &&
-           point.z >= min.z && point.z <= max.z;
+        point.y >= min.y && point.y <= max.y &&
+        point.z >= min.z && point.z <= max.z;
 }

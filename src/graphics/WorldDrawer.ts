@@ -8,7 +8,6 @@ import { Dictionary } from '../logic/Core'
 import { IWorldObject } from '../logic/IWorldObject'
 import { IGizmo } from './IGizmo'
 import { ConeOnSphereGizmo } from './ConeOnSphereGizmo'
-import { degrees2Radians } from '../logic/Angle'
 
 export class WorldDrawer implements Experience {
   resources: Resource[] = []
@@ -95,7 +94,8 @@ export class WorldDrawer implements Experience {
       const eyeSightGizmo = new ConeOnSphereGizmo(
         eyeSight.getSightPosition(),
         eyeSight.getSightLength(),
-        degrees2Radians(eyeSight.getFov() / 2)
+        eyeSight.getHalfFovRadian(),
+        eyeSight.getDirection()
       )
       gizmos.push(eyeSightGizmo)
     }
