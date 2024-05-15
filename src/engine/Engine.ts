@@ -70,6 +70,7 @@ export class Engine {
     this.renderEngine.update()
     this.experience.update(delta)
     this.debug.update()
+    this.debug.Test()
   }
 
   resize() {

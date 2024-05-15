@@ -1,7 +1,10 @@
 import * as lilGui from 'lil-gui'
 import Stats from 'three/examples/jsm/libs/stats.module'
+import { Global } from '../../logic/Global'
 
 let instance: DebugUI | null = null
+
+let tested = false
 
 export class DebugUI {
   gui!: lilGui.GUI
@@ -39,5 +42,22 @@ export class DebugUI {
 
   update() {
     this.stats.update()
+  }
+
+  Test() {
+    if (Global.I().world && Global.I().world?.getPlayerPosition() != null) {
+      if (tested) {
+        return
+      }
+      tested = true
+
+      this.gui
+        .add(Global.I().world!!.getPlayerPosition(), 'y')
+        .min(-3)
+        .max(3)
+        .step(0.01)
+
+      this.gui.add(document, 'title')
+    }
   }
 }

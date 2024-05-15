@@ -2,6 +2,7 @@ import './style.scss'
 import { Engine } from './engine/Engine'
 import { WorldDrawer } from './graphics/WorldDrawer'
 import { Game } from './logic/Game'
+import { DebugPannel } from './engine/DebugPannel'
 
 var game = new Game()
 
@@ -16,3 +17,7 @@ new Engine({
     title: 'Pathfinding',
   },
 })
+
+var debugPannel = new DebugPannel()
+debugPannel.init()
+debugPannel.update()
