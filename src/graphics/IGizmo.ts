@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { Vector3 } from "../logic/Vector3";
+import { Vector3 } from "three";
 
 export interface IGizmo {
     getLineSegmets(): THREE.LineSegments;

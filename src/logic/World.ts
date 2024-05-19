@@ -4,7 +4,8 @@ import { Global } from "./Global";
 import { IGlobalWorld, ObjectDistanceSquared } from "./IGlobalWorld";
 import { IWorldObject } from "./IWorldObject"
 import { Person } from "./Person";
-import { Vector3, checkCollision } from "./Vector3";
+import { checkCollision } from "./VectorExtensions";
+import { Quaternion, Vector3 } from "three";
 
 export class World implements IGlobalWorld {
     private objects: Dictionary<number, IWorldObject> = new Dictionary<number, IWorldObject>;
@@ -29,36 +30,35 @@ export class World implements IGlobalWorld {
 
             // 사람인 경우
             if (obj instanceof Person) {
-                const person = obj as Person;
-                const eyeSight = person.getSight();
-                const closest3 = eyeSight!.getClosest3();
-                if (closest3.length > 0) {
-                    console.log(closest3[0]);
-                }
+                // TODO: 시야 내보내기.
+                // const person = obj as Person;
+                // const eyeSight = person.getSight();
+                // const closest3 = eyeSight!.getClosest3();
             }
         }
     }
 
     public updatePosition(object: IWorldObject): void {
         const force = object.getForce();
-        if (force.magnitude < Number.EPSILON) {
+        if (force.lengthSq() < Number.EPSILON) {
             return;
         }
 
-        console.log(object.getForce());
-
         const position = object.getPosition();
-        const newPosition = new Vector3(
-            position.x + force.direction.x * force.magnitude,
-            position.y + force.direction.y * force.magnitude,
-            position.z + force.direction.z * force.magnitude
-        );
+        const quaternion: Quaternion = object.getDirection();
+        // 회전된 힘(쿼터니언을 적용한 힘)
+        const rotatedForce = force.clone().applyQuaternion(quaternion);
+        const newPosition = position.clone().add(rotatedForce.multiplyScalar(0.1));
 
         if (this.checkCollisions(object.getId(), position, newPosition)) {
             return;
         }
 
         object.setPosition(newPosition);
+
+        // 힘 줄이기
+        force.multiplyScalar(0.5);
+        object.setForce(force);
     }
 
     private constructor() { }
@@ -91,19 +91,19 @@ export class World implements IGlobalWorld {
     ): boolean {
         // 캐릭터의 위치를 기준으로 시야 벡터 계산
         var sightVector = eyeSight.getDirection().normalize();
-        sightVector.scale(eyeSight.getSightLength());
+        sightVector.multiplyScalar(eyeSight.getSightLength());
 
         // 캐릭터에서 대상까지의 벡터
-        var objectVector = target.getPosition().subtract(
+        var objectVector = target.getPosition().sub(
             eyeSight.getSightPosition());
 
         // 시야 벡터와 대상 벡터 사이의 각도 계산
-        var angleBetween = Vector3.angleBetween(sightVector, objectVector)
+        var angleBetween = sightVector.angleTo(objectVector);
 
         // 시야 각도 내에 있는지 확인
         if (angleBetween <= eyeSight.getHalfFovRadian()) {
             // 대상과의 거리가 시야 범위 내에 있는지 확인
-            if (objectVector.squaredMagnitude() <=
+            if (eyeSight.getSightPosition().distanceToSquared(target.getPosition()) <=
                 eyeSight.getSightLength() * eyeSight.getSightLength()) {
                 return true;
             }
@@ -124,7 +124,7 @@ export class World implements IGlobalWorld {
             if (this.checkObjectInSight(obj, eyeSight)) {
                 objectsInSight.push([
                     obj,
-                    obj.getPosition().distanceSquared(
+                    obj.getPosition().distanceToSquared(
                         eyeSight.getSightPosition())
                 ]);
             }

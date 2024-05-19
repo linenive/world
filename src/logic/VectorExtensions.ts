@@ -1,16 +1,6 @@
-import { clamp } from './Core';
+import { Vector3 } from "three";
 
-export class Vector3 {
-    x: number;
-    y: number;
-    z: number;
-
-    constructor(x: number, y: number, z: number) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
-
+export class ExtendedVector3 extends Vector3 {
     static get Zero(): Vector3 {
         return new Vector3(0, 0, 0);
     }
@@ -27,66 +17,16 @@ export class Vector3 {
         return new Vector3(1, 0, 0);
     }
 
-    static add(v1: Vector3, v2: Vector3): Vector3 {
-        return new Vector3(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
+    static get Backward(): Vector3 {
+        return new Vector3(0, 0, -1);
     }
 
-    static subtract(v1: Vector3, v2: Vector3): Vector3 {
-        return new Vector3(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
+    static get Down(): Vector3 {
+        return new Vector3(0, -1, 0);
     }
 
-    static scale(v: Vector3, scalar: number): Vector3 {
-        return new Vector3(v.x * scalar, v.y * scalar, v.z * scalar);
-    }
-
-    static dot(v1: Vector3, v2: Vector3): number {
-        return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
-    }
-
-    /** 정규화된 벡터를 사용한다고 가정 */
-    static angleBetween(v1: Vector3, v2: Vector3): number {
-        var dotProduct = v1.dot(v2)
-        return Math.acos(clamp(dotProduct, -1, 1))
-    }
-
-    public add(v: Vector3): Vector3 {
-        return Vector3.add(this, v);
-    }
-
-    public subtract(v: Vector3): Vector3 {
-        return Vector3.subtract(this, v);
-    }
-
-    public scale(scalar: number): Vector3 {
-        return Vector3.scale(this, scalar);
-    }
-
-    public dot(v: Vector3): number {
-        return Vector3.dot(this, v);
-    }
-
-    public magnitude(): number {
-        return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
-    }
-
-    public squaredMagnitude(): number {
-        return this.x * this.x + this.y * this.y + this.z * this.z;
-    }
-
-    public normalize(): Vector3 {
-        const magnitude = this.magnitude();
-        return new Vector3(this.x / magnitude, this.y / magnitude, this.z / magnitude);
-    }
-
-    public distanceSquared(v: Vector3): number {
-        const dx = this.x - v.x;
-        const dy = this.y - v.y;
-        const dz = this.z - v.z;
-        return dx * dx + dy * dy + dz * dz;
-    }
-
-    toString(): string {
-        return `(${this.x}, ${this.y}, ${this.z})`;
+    static get Left(): Vector3 {
+        return new Vector3(-1, 0, 0);
     }
 }
 
@@ -96,8 +36,8 @@ export function checkCollision(
     position: Vector3,
     size: Vector3
 ): boolean {
-    const halfSize = size.scale(0.5);
-    const min = position.subtract(halfSize);
+    const halfSize = size.multiplyScalar(0.5);
+    const min = position.sub(halfSize);
     const max = position.add(halfSize);
 
     // Initial point containment check
@@ -105,7 +45,7 @@ export function checkCollision(
         return true;
     }
 
-    const direction = to.subtract(from);
+    const direction = to.sub(from);
 
     // Avoid division by zero and check if the point is in range for the zero direction component
     if ((direction.x === 0 && (from.x < min.x || from.x > max.x)) ||

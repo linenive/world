@@ -1,5 +1,5 @@
 import { ObjectDistanceSquared } from "./IGlobalWorld";
-import { Vector3 } from "./Vector3";
+import { Vector3 } from "three";
 
 export interface IEyeSight {
     getSightPosition(): Vector3;

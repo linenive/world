@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import { IGizmo } from './IGizmo'
-import { Vector3 } from '../logic/Vector3'
+import { Vector3 } from 'three'
 import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils'
 
 export class ConeOnSphereGizmo extends THREE.LineSegments implements IGizmo {

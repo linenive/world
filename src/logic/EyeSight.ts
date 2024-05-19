@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import { IEyeSight } from "./IEyeSight";
-import { Vector3 } from "./Vector3";
+import { Vector3 } from "three"
 import { Global } from "./Global";
 import { IWorldObject } from "./IWorldObject";
 import { degrees2Radians } from "./Angle";
@@ -26,8 +26,7 @@ export class EyeSight implements IEyeSight {
     }
 
     public getSightPosition(): Vector3 {
-        return Vector3.add(
-            this.owner.getPosition(), this.sightLocalPosition);
+        return this.owner.getPosition().add(this.sightLocalPosition);
     }
 
     public getSightLength(): number {

@@ -1,6 +1,6 @@
 import { EyeSight } from "./EyeSight";
 import { IWorldObject } from "./IWorldObject";
-import { Vector3 } from "./Vector3";
+import { Vector3 } from "three";
 
 export type ObjectDistanceSquared = [IWorldObject, number];
 

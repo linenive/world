@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import vertexShader from './shader.vert'
 import fragmentShader from './shader.frag'
-import { Vector3 } from '../logic/Vector3'
+import { Vector3 } from 'three'
 
 export class Box extends THREE.Mesh {
   constructor(size: Vector3, color: THREE.Color | null) {
@@ -19,8 +19,9 @@ export class Box extends THREE.Mesh {
       fragmentShader,
     })
 
-    // set pivot point to left bottom corner
-    geometry.translate(size.x / 2, size.y / 2, size.z / 2)
+    // set pivot point to bottom center
+    geometry.translate(0, size.y / 2, 0)
+
 
     super(geometry, material)
   }

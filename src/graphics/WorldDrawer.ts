@@ -56,7 +56,9 @@ export class WorldDrawer implements Experience {
       // Update object position
       const object3d = this.sceneObjects.get(id)
       const position = obj.getPosition()
+      const rotation = obj.getDirection()
       object3d!.position.set(position.x, position.y, position.z)
+      object3d!.rotation.setFromQuaternion(rotation)
 
       // Update gizmos
       const gizmos = this.gizmos.get(id)

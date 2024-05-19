@@ -2,6 +2,7 @@ import './style.scss'
 import { Engine } from './engine/Engine'
 import { WorldDrawer } from './graphics/WorldDrawer'
 import { Game } from './logic/Game'
+import { BindKey } from './logic/KeyInput'
 
 var game = new Game()
 
@@ -16,3 +17,5 @@ new Engine({
     title: 'Pathfinding',
   },
 })
+
+BindKey(game)
